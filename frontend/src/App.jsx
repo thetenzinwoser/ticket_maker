@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import TicketInput from './components/TicketInput'
 import TicketPreview from './components/TicketPreview'
 import { ImageUpload } from './components/ImageUpload'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [generatedContent, setGeneratedContent] = useState('')
