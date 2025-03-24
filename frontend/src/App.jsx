@@ -5,6 +5,7 @@ import TicketInput from './components/TicketInput'
 import TicketPreview from './components/TicketPreview'
 import { ImageUpload } from './components/ImageUpload'
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from './api/config';
 
 function App() {
   const [generatedContent, setGeneratedContent] = useState('')
@@ -44,7 +45,7 @@ function App() {
       })
       
       // Make request to backend with signal
-      const response = await fetch('http://localhost:5001/generate-ticket', {
+      const response = await fetch(`${API_BASE_URL}/generate-ticket`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
