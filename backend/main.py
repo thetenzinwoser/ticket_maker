@@ -24,17 +24,14 @@ engine = create_engine(DATABASE_URL)
 
 app = Flask(__name__)
 
-# Update the CORS configuration to include your frontend URL
-CORS(app, origins=[
-    "http://localhost:5173",  # Local development
-    "https://ticket-maker-frontend.onrender.com"  # Add your actual frontend URL
-])
+# Configure CORS to be more permissive for troubleshooting
+CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}}, allow_headers=["Content-Type", "Authorization"])
 
-# Initialize OpenAI client - modify this if using openai==0.28.1
-# client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# Initialize OpenAI client - uncomment this for openai>=1.0.0
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-# For openai==0.28.1, use this instead:
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# For openai==0.28.1, use this instead (comment out if using the above line):
+# openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def validate_base64_image(img_str):
     """Validate that the string is a valid base64 encoded image."""
