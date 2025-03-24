@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import TicketInput from './components/TicketInput'
@@ -12,6 +12,15 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [attachedFiles, setAttachedFiles] = useState([])
   const abortControllerRef = useRef(null)
+  
+  // Clean up any pending requests when component unmounts
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   const handleGenerate = async (description) => {
     if (!description.trim()) {
@@ -23,6 +32,9 @@ function App() {
     setGeneratedContent('')
     
     // Create a new AbortController
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
     abortControllerRef.current = new AbortController()
     const { signal } = abortControllerRef.current
 
@@ -44,6 +56,8 @@ function App() {
         throw error
       })
       
+      console.log("Making request to:", `${API_BASE_URL}/generate-ticket`);
+      
       // Make request to backend with signal
       const response = await fetch(`${API_BASE_URL}/generate-ticket`, {
         method: 'POST',
@@ -55,11 +69,19 @@ function App() {
           images: base64Images
         }),
         signal
-      })
+      });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.detail || `Server error: ${response.status}`)
+        let errorMessage = `Server error: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.detail) {
+            errorMessage = errorData.detail;
+          }
+        } catch (parseError) {
+          console.error("Failed to parse error response:", parseError);
+        }
+        throw new Error(errorMessage);
       }
 
       // Process the streaming response
@@ -79,6 +101,8 @@ function App() {
       }
 
     } catch (error) {
+      console.error("Generation error:", error);
+      
       if (error.name === 'AbortError') {
         toast.info('Generation stopped', {
           autoClose: 3000,
@@ -86,7 +110,7 @@ function App() {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true
-        })
+        });
       } else {
         toast.error(`Error: ${error.message}`, {
           autoClose: 3000,
@@ -94,18 +118,20 @@ function App() {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true
-        })
-        console.error('Error:', error)
+        });
       }
     } finally {
-      setIsGenerating(false)
-      abortControllerRef.current = null
+      if (abortControllerRef.current) {
+        abortControllerRef.current = null;
+      }
+      setIsGenerating(false);
     }
   }
 
   const handleStop = () => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
     }
   }
 
