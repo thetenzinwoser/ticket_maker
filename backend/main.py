@@ -27,7 +27,7 @@ app = Flask(__name__)
 # Update the CORS configuration to include your frontend URL
 CORS(app, origins=[
     "http://localhost:5173",  # Local development
-    "https://ticket-maker.onrender.com"  # Your production frontend URL
+    "https://ticket-maker-frontend.onrender.com"  # Add your actual frontend URL
 ])
 
 # Initialize OpenAI client - modify this if using openai==0.28.1
