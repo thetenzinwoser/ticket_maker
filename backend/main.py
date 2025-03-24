@@ -10,9 +10,16 @@ from dotenv import load_dotenv
 import os
 import json
 import asyncio
+from sqlalchemy import create_engine
 
 # Load environment variables
 load_dotenv()
+
+# Database configuration
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://ticket_maker_postgre_user:wW7JAGtpvUkWLicVJdP0iU9p6gue7vyu@dpg-cvgbd4popnds73bh0i1g-a.ohio-postgres.render.com/ticket_maker_postgre")
+
+# Update your database connection to use the URL
+engine = create_engine(DATABASE_URL)
 
 app = Flask(__name__)
 
