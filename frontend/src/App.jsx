@@ -161,22 +161,28 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center my-6 text-gray-800">Ticket Generator</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="min-h-screen bg-gray-100 flex">
+      {/* Left Panel - Input Section */}
+      <div className="w-1/2 p-6 bg-white shadow-lg">
+        <div className="max-w-xl mx-auto">
+          <h1 className="text-3xl font-bold mb-8 text-gray-800">Ticket Generator</h1>
           <TicketInput
             onGenerate={handleGenerate}
             onStop={handleStop}
             isGenerating={isGenerating}
             onImagesChange={handleImagesChange}
           />
-          <TicketPreview
-            content={generatedContent}
-            isGenerating={isGenerating}
-          />
         </div>
       </div>
+
+      {/* Right Panel - Preview Section */}
+      <div className="w-1/2 h-screen sticky top-0">
+        <TicketPreview
+          content={generatedContent}
+          isGenerating={isGenerating}
+        />
+      </div>
+
       <ToastContainer position="bottom-right" />
     </div>
   )
