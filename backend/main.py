@@ -16,11 +16,17 @@ import openai
 # Load environment variables
 load_dotenv()
 
-# Database configuration
+# Make database connection optional for local development
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-# Update your database connection to use the URL
-engine = create_engine(DATABASE_URL)
+if DATABASE_URL:
+    try:
+        engine = create_engine(DATABASE_URL)
+    except Exception as e:
+        print(f"Warning: Could not connect to database: {e}")
+        engine = None
+else:
+    print("Warning: No DATABASE_URL provided, running without database connection")
+    engine = None
 
 app = Flask(__name__)
 
@@ -59,42 +65,35 @@ def validate_base64_image(img_str):
 
 def create_ticket_prompt(description: str, images: list = None):
     """Create a prompt for the GPT-4 model with enhanced Jira-compatible formatting."""
-    base_prompt = f"""Generate a detailed Jira ticket based on EXACTLY what the user has described below. 
-    
-    Tickets should be concise, clear, and structured to allow engineers to quickly understand and act on tasks. The structure is as follows:
+    base_prompt = f"""
+Please format the response using markdown syntax:
+- Use # for Title (h1)
+- Use ## for section headers (h2)
+- Use **bold** for emphasis
+- Use - for bullet points
+- Use 1. for numbered lists
+- Use ---- for horizontal dividers
 
-    h1. Summary
-    A brief, descriptive summary reflecting the user's request.
+Generate a detailed ticket for the following description:
+{description}
 
-    h2. Description
-    A clear explanation directly based on the user's input.
+Structure the ticket with these sections:
+# Title
 
-    h2. Requirements
-    # Technical requirements derived from the user's description
-    # Additional requirements needed to complete the task
+## Description
+[Detailed description]
 
-    h2. Acceptance Criteria
-    # Criteria point 1
-    # Criteria point 2
-    # Additional criteria as needed
+## Requirements
+[List of requirements]
 
-    h2. Additional Notes
-    Any important considerations or links.
+## Acceptance Criteria
+[List of acceptance criteria]
 
-    ============= USER'S DESCRIPTION (MOST IMPORTANT) =============
-    {description}
-    ============================================================
-    """
-    
-    if images and len(images) > 0:
-        base_prompt += """
-        
-        Important: The attached images provide additional context. Please:
-        1. Include specific color codes or styling changes
-        2. Reference the exact location of changes in the UI
-        3. Maintain high attention to detail in the analysis
-        4. CRITICAL: The user's written description is the primary input - the images are supplementary"""
-    
+## Additional Notes
+[Any additional information]
+
+Remember to use proper markdown formatting throughout the response.
+"""
     return base_prompt
 
 def stream_gpt_response(description: str, images: list = None):
@@ -104,7 +103,7 @@ def stream_gpt_response(description: str, images: list = None):
         
         # Base messages without images
         messages = [
-            {"role": "system", "content": "You are a precise UI/UX ticket writer. Your primary task is to write tickets based on what the user has written in their description. If images are provided, they supplement the text but do not override it."},
+            {"role": "system", "content": "You are a experienced manager that has worked for many years at established tech companies. you are a master crafter of tickets and can translate even the most complex designs into readable and easy to action on engineering tickets."},
             {
                 "role": "user",
                 "content": [

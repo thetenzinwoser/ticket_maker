@@ -1,0 +1,116 @@
+.jira-content {
+  color: #172B4D;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+}
+
+.jira-content strong {
+  font-weight: 600;
+  color: #172B4D;
+}
+
+.jira-content h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #DFE1E6;
+  color: #172B4D;
+}
+
+.jira-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #172B4D;
+}
+
+.jira-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #172B4D;
+}
+
+.jira-content p {
+  margin-bottom: 16px;
+  color: #172B4D;
+}
+
+.jira-content ul, 
+.jira-content ol {
+  margin: 8px 0 16px 0;
+  padding-left: 24px;
+}
+
+.jira-content li {
+  margin-bottom: 4px;
+  color: #172B4D;
+}
+
+.jira-content ul li {
+  list-style-type: disc;
+}
+
+.jira-content ol li {
+  list-style-type: decimal;
+}
+
+.jira-content code {
+  background-color: #F4F5F7;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: Monaco, Consolas, 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.jira-content pre {
+  background-color: #F4F5F7;
+  padding: 12px;
+  border-radius: 3px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.jira-content blockquote {
+  border-left: 2px solid #DFE1E6;
+  color: #5E6C84;
+  margin: 12px 0;
+  padding: 0 12px;
+}
+
+.jira-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.jira-content table th,
+.jira-content table td {
+  border: 1px solid #DFE1E6;
+  padding: 8px;
+  text-align: left;
+}
+
+.jira-content table th {
+  background-color: #F4F5F7;
+  font-weight: 600;
+}
+
+.jira-content a {
+  color: #0052CC;
+  text-decoration: none;
+}
+
+.jira-content a:hover {
+  text-decoration: underline;
+}
+
+.jira-content hr {
+  border: none;
+  border-top: 1px solid #DFE1E6;
+  margin: 16px 0;
+} 

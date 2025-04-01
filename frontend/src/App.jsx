@@ -3,9 +3,8 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import TicketInput from './components/TicketInput'
 import TicketPreview from './components/TicketPreview'
-import { ImageUpload } from './components/ImageUpload'
-import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from './api/config';
+import './styles/jira.css'
 
 function App() {
   const [generatedContent, setGeneratedContent] = useState('')
@@ -161,26 +160,47 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Left Panel - Input Section */}
-      <div className="w-1/2 p-6 bg-white shadow-lg">
+      <div className="w-1/2 p-6 overflow-auto">
         <div className="max-w-xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-gray-800">Ticket Generator</h1>
-          <TicketInput
-            onGenerate={handleGenerate}
-            onStop={handleStop}
-            isGenerating={isGenerating}
-            onImagesChange={handleImagesChange}
-          />
+          <h1 className="text-3xl font-bold mb-6 text-[#1D2B4D]">Jira Ticket Creator</h1>
+          <p className="text-lg text-gray-600 mb-8">
+            Turn your ideas into high-quality Jira tickets instantly. Just describe what 
+            you need in plain language, attach any relevant images, and let AI 
+            generate detailed tickets for your engineering team.
+          </p>
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <TicketInput
+              onGenerate={handleGenerate}
+              onStop={handleStop}
+              isGenerating={isGenerating}
+              onImagesChange={handleImagesChange}
+            />
+          </div>
         </div>
       </div>
 
       {/* Right Panel - Preview Section */}
-      <div className="w-1/2 h-screen sticky top-0">
-        <TicketPreview
-          content={generatedContent}
-          isGenerating={isGenerating}
-        />
+      <div className="w-1/2 h-screen sticky top-0 border-l border-gray-200">
+        <div className="h-full bg-white flex flex-col">
+          <div className="bg-[#0747A6] text-white px-6 py-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Generated Ticket</h2>
+            {isGenerating && (
+              <span className="text-sm text-gray-100 animate-pulse">
+                Generating...
+              </span>
+            )}
+          </div>
+          
+          <div className="flex-1 overflow-auto p-6">
+            <TicketPreview
+              content={generatedContent}
+              isGenerating={isGenerating}
+            />
+          </div>
+        </div>
       </div>
 
       <ToastContainer position="bottom-right" />

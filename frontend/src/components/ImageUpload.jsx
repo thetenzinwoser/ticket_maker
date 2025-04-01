@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react';
 import { toast } from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 const MAX_FILES = 10;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png'];
 
-export const ImageUpload = ({ onImagesChange }) => {
+function ImageUpload({ onChange, disabled }) {
   const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -37,7 +38,7 @@ export const ImageUpload = ({ onImagesChange }) => {
 
     setImages(prev => {
       const updated = [...prev, ...newImagePreviews];
-      onImagesChange?.(updated.map(img => img.file));
+      onChange?.(updated.map(img => img.file));
       return updated;
     });
   };
@@ -54,7 +55,7 @@ export const ImageUpload = ({ onImagesChange }) => {
   const handleRemoveImage = (index) => {
     setImages(prev => {
       const updated = prev.filter((_, i) => i !== index);
-      onImagesChange?.(updated.map(img => img.file));
+      onChange?.(updated.map(img => img.file));
       return updated;
     });
   };
@@ -107,4 +108,11 @@ export const ImageUpload = ({ onImagesChange }) => {
       )}
     </div>
   );
-}; 
+}
+
+ImageUpload.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
+};
+
+export default ImageUpload; 
